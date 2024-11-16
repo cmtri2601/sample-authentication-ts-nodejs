@@ -2,8 +2,10 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { sum } from '~/utils/calc';
+import { addSection } from '~/utils/session';
 // import basicAuthenticate from '~/auth/1_basic';
-import cookieAuthenticate from '~/auth/2_cookie';
+// import cookieAuthenticate from '~/auth/2_cookie';
+import sessionAuthenticate from '~/auth/2_session';
 const app = express();
 
 // fake db
@@ -26,13 +28,23 @@ app.use(express.urlencoded({ extended: false }));
 
 // login -- add login before authentication
 app.get('/login', (req, res) => {
+  // --- cookie authentication ---
   // to test csrf by FETCH, sameSite: 'none' && secure: true
-  res.cookie('username', 'John Doe', {
+  // res.cookie('username', 'John Doe', {
+  //   httpOnly: true,
+  //   // sameSite: 'lax', // default is 'lax',
+  //   // secure: true, // if sameSite = none, we need set secure = true to make browser accept
+  //   maxAge: 5 * 60 * 1000
+  // });
+
+  // --- session authentication ---
+  const session = new Date().getTime() + 'John Doe';
+  addSection(session);
+  res.cookie('session', session, {
     httpOnly: true,
-    // sameSite: 'lax', // default is 'lax',
-    // secure: true, // if sameSite = none, we need set secure = true to make browser accept
     maxAge: 5 * 60 * 1000
   });
+
   res.send(`
     <html>
       <div>You are in!</div>
@@ -42,7 +54,7 @@ app.get('/login', (req, res) => {
 });
 
 // authentication middleware
-app.use(cookieAuthenticate);
+app.use(sessionAuthenticate);
 
 // home page
 app.get('/', async (req, res) => {
@@ -98,4 +110,6 @@ app.get('/test-chalk', async (req, res) => {
   res.send('Hello World');
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.info('Server is listening at port 3000');
+});

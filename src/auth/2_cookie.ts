@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import users from './data/user.json';
+import users from '../data/user.json';
 
 function cookieAuthenticate(req: Request, res: Response, next: NextFunction) {
   // Kiểm tra xem người dùng đã đăng nhập chưa

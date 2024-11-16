@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import fs from 'fs';
-import users from './data/user.json';
+import { checkSection } from '~/utils/session';
 
-const sessionUrl = './data/session.txt';
-
-function sessionAuthenticate(req: Request, res: Response, next: NextFunction) {
+async function sessionAuthenticate(req: Request, res: Response, next: NextFunction) {
   // Kiểm tra xem người dùng đã đăng nhập chưa
-  if (!users.includes(req.cookies.username)) {
-    res.status(401).send(``);
+  if (!(await checkSection(req.cookies.session))) {
+    res.status(401).send(`<div>Login to continue <a href='/login'>login</a></div>`);
     return;
   }
+  console.log('session iss checked');
   next();
 }
 

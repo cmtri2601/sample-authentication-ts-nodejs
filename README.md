@@ -6,6 +6,7 @@
 - [Cors](#cors)
 - [Site](#site)
 - [Credential](#credential)
+- [Debug](#debug)
 
 ## Typescript
 
@@ -39,8 +40,8 @@ Can't use default config of ts by extends config base https://github.com/tsconfi
 
 - Basic - (no recommend)
 - Cookie
-- Session (in server)
-- JWT (stateless - just store in client) => can't combine with Session to make stateful, include
+- Session (in server): slow because query data
+- JWT (stateless - just store in client): fast because don't need to query data => can combine with Session to make stateful, include
   - Access token (stateless - in browser)
   - Refresh token (stateful - in server (file, cache, ram, db))
 - Open (OAuth 2.0)
@@ -114,3 +115,9 @@ Credentials are cookies, TLS client certificates, or authentication headers cont
 - same-origin: Only send and include credentials for same-origin requests.
 
 - include: Always include credentials, even for cross-origin requests.
+
+## Typescript
+
+- Debug with "Launch via NPM", "nodemon" need to turn off all breakpoint
+- Debug with "--inspect" and "Attach to process" don't need to turn of breakpoint ===> prefer
+  ==> All need to re-attach after restart
